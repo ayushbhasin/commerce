@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 from django.urls import reverse
-
-from .models import User
+from .models import *
 
 
 def index(request):
@@ -31,10 +31,29 @@ def login_view(request):
         return render(request, "auctions/login.html")
 
 
-def createListing():
-    return render(request, "auctions/createListing.html")
+@login_required
+def createListing(request):
+    if request.method == "GET":
+        return render(request, 'auctions/createListing.html',)
+        # REVIEW: alert box
+    else:
+        request.method == "POST"
+        postTitle = request.POST["postTitle"]
+        postDes = request.POST["postDes"]
+        startPrice = request.POST["startPrice"]
+        userPk = request.user.id  # REVIEW:
+        user = User.objects.get(id=userPk)
+        newItem = Items(name=postTitle, description=postDes,
+                        is_active=True, owner=user, startPrice=startPrice)
+        newItem.save()
+        return render(request, 'auctions/createListing.html',)
 
 
+def activeListings():
+    return render(request, "auctions/activeListings.html")
+
+
+"""
 def watchlist():
     return render(request, "auctions/watchlist.html")
 
@@ -45,6 +64,7 @@ def activeListings():
 
 def categories():
     return render(request, "auctions/categories.html")
+"""
 
 
 def logout_view(request):
