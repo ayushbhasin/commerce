@@ -8,7 +8,17 @@ from .models import *
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    getObject = Items.objects.get(id=2)
+    postTitle = getObject.name
+    postDes = getObject.description
+    postPrice = getObject.startPrice
+    getImgUrl = getObject.imageUrl
+    return render(request, "auctions/index.html", {
+        "Title": postTitle,
+        "Description": postDes,
+        "CurrentBid": postPrice,
+        "ImageUrl": getImgUrl
+    })
 
 
 def login_view(request):
@@ -49,17 +59,10 @@ def createListing(request):
         return render(request, 'auctions/createListing.html',)
 
 
-def activeListings():
-    return render(request, "auctions/activeListings.html")
-
-
 """
 def watchlist():
     return render(request, "auctions/watchlist.html")
 
-
-def activeListings():
-    return render(request, "auctions/activeListings.html")
 
 
 def categories():
