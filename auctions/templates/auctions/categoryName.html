@@ -1,10 +1,10 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<h2>Active Listings</h2> <!-- REVIEW: make loop  -->
+<h2>Results for {{ cat_name }}</h2> <!-- REVIEW: make loop  -->
 
 
-{% for item in items   %}
+{% for item in list_items   %}
 <span><br></span>
 <div class="card" style="width: 18rem;">
   <img class="card-img-top" src="{{item.imageUrl}}">
@@ -12,7 +12,7 @@
     <h5 class="card-title">{{item.name}}</h5>
     <p class="card-text">{{item.description}}</p>
     <p>Current Bid: {{item.start_price}}</p>
-    <form action="{% url 'index' %}" method="GET">
+    <form action="#" method="GET">
       <input type="text"><br>
       <input class="btn btn-primary" type="submit" value="Place Bid">
     </form>

@@ -19,20 +19,22 @@ class Category(models.Model):
 class Items(models.Model):
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=100)
-    imageUrl = models.CharField(max_length=250, null=True, blank=True)
+    imageUrl = models.URLField(max_length=200, null=True)
     is_active = models.BooleanField()
     owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="accountUser")
+        User, on_delete=models.CASCADE, related_name="UserItems")
     # REVIEW:
     category = models.ForeignKey(
-        Category, null=True, blank=True, on_delete=models.SET(Category))
-    startPrice = models.DecimalField(max_digits=8, decimal_places=2)
+        Category, null=True, blank=True, on_delete=models.SET(Category), related_name='CategoryItems')
+    start_price = models.DecimalField(max_digits=8, decimal_places=2)
 
     class Meta:
         verbose_name_plural = "Items"
 
     def __str__(self):
         return self.name
+# REVIEW: if there are no bids return current price
+# if there are bids iternate over bids and get the highest number
 
 
 class UserItems(models.Model):

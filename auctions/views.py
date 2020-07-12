@@ -8,16 +8,25 @@ from .models import *
 
 
 def index(request):
-    getObject = Items.objects.get(id=2)
-    postTitle = getObject.name
-    postDes = getObject.description
-    postPrice = getObject.startPrice
-    getImgUrl = getObject.imageUrl
+    items = Items.objects.all()
     return render(request, "auctions/index.html", {
-        "Title": postTitle,
-        "Description": postDes,
-        "CurrentBid": postPrice,
-        "ImageUrl": getImgUrl
+        "items": items
+    })
+
+
+def categories(request):
+    getCategories = Category.objects.all()
+    return render(request, "auctions/categories.html", {
+        "ListCategories": getCategories
+    })
+
+
+def categoryName(request, catName):
+    get_cat = Category.objects.get(name=catName)
+    list_items = get_cat.CategoryItems.all()
+    return render(request, "auctions/categoryName.html", {
+        "cat_name": catName,
+        "list_items": list_items
     })
 
 
@@ -51,23 +60,19 @@ def createListing(request):
         postTitle = request.POST["postTitle"]
         postDes = request.POST["postDes"]
         startPrice = request.POST["startPrice"]
+        imgUrl = request.POST["imgUrl"]
+        cat_name = request.POST["catgyName"]
         userPk = request.user.id  # REVIEW:
         user = User.objects.get(id=userPk)
         newItem = Items(name=postTitle, description=postDes,
-                        is_active=True, owner=user, startPrice=startPrice)
+                        is_active=True, imageUrl=imgUrl, owner=user, start_price=startPrice)
+        itmID = newItem.id
+    #    userItem = UserItems(user=user, Item=itmID) # REVIEW:
+        catAdd = Category(name=cat_name)
         newItem.save()
+        # userItem.save()
+        catAdd.save()
         return render(request, 'auctions/createListing.html',)
-
-
-"""
-def watchlist():
-    return render(request, "auctions/watchlist.html")
-
-
-
-def categories():
-    return render(request, "auctions/categories.html")
-"""
 
 
 def logout_view(request):
