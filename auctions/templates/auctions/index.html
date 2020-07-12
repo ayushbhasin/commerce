@@ -1,16 +1,17 @@
 {% extends "auctions/layout.html" %}
-
+<!-- Main page displaying all listings whether user is logged in or not-->
 {% block body %}
 <h2>Active Listings</h2> <!-- REVIEW: make loop  -->
 
 
 {% for item in items   %}
+<!-- for loop here will get items from index view and iterate over list of all items that are active -->
 <span><br></span>
 <a href="{% url 'listing' item %}">
   <div class="card" style="width: 18rem;">
-    <img class="card-img-top" src="{{item.imageUrl}}">
+    <img class="card-img-top" src="{{item.image_url}}">
     <div class="card-body">
-      <h5 class="card-title">{{item.name}}</h5>
+      <h5 class="card-title">{{item.item_name}}</h5>
     </div>
   </div>
 </a>

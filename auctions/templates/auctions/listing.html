@@ -1,20 +1,27 @@
 {% extends "auctions/layout.html" %}
-
+<!-- Listing page displaying a single listing for Item that is selected
+from active listings-->
 {% block body %}
-<h2>Listing: {{get_item.name}}</h2> <!-- REVIEW: make loop  -->
+<h2>Listing: {{get_item.item_name}}</h2> <!-- REVIEW: make loop  -->
 <span><br></span>
 <div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="{{get_item.imageUrl}}">
+  <img class="card-img-top" src="{{get_item.image_url}}">
   <div class="card-body">
-    <form action="{% url 'placeBid' %}" method="POST">
+    <!-- Up to here shows Card Stack with Item Name, Image, Description
+   https://www.w3schools.com/bootstrap4/bootstrap_cards.asp-->
+    <form action="{% url 'fetchBid' %}" method="POST">
       {% csrf_token %}
-      <h1 name="itemID" hidden>{{get_item.id}}</h1>
-      <h5 name="title_name" class="card-title">{{get_item.name}}</h5>
+      <!-- Form submits on action of the Bid being placed -->
+      <h5 class="card-title">{{get_item.item_name}}</h5>
       <p class="card-text">{{get_item.description}}</p>
       <p>Current Bid: {{get_item.start_price}}</p>
-      <input type="number" name="bid" min="1" step=".01"><br>
+      <input type="hidden" name="listing_name" value="{{get_item.item_name}}">
+      <input type="number" name="bid_price" min="1" step=".01"><br>
+      <!-- Submit below captures Bid Price, and the hidden
+      input field of the Name -->
       <input class="btn btn-primary" type="submit" value="Place Bid">
+
     </form>
   </div>
-</div>
-{% endblock %}
+
+  {% endblock %}

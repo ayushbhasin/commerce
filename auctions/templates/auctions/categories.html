@@ -1,10 +1,14 @@
 {% extends "auctions/layout.html" %}
-
+<!-- Category page will display all categories which can be clicked to retrive there items-->
 {% block body %}
 <h2>Categories</h2>
+{% for cat_name in list_categories %}
+
 <ul>
-  {% for catName in ListCategories %}
-  <li><a href="{% url 'categoryName' catName %}">{{catName}}</a></li>
-  {% endfor %}
+  <!-- for loop here will get category list from categories view and iterate over
+  list of all CATEGORIES-->
+  <li><a href="{% url 'category_name' cat_name %}">{{cat_name}}</a></li>
+  <!-- the link will pass this to display specifc items within the category  -->
 </ul>
+{% endfor %}
 {% endblock %}

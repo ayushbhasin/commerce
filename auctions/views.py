@@ -15,25 +15,44 @@ def index(request):
 
 
 def listing(request, item):
-    print(item)
-    get_item = Items.objects.get(name=item)
+    get_item = Items.objects.get(item_name=item)
     return render(request, "auctions/listing.html", {
-        "get_item": get_item
+        "get_item": get_item,
+        "get_item_name": get_item.item_name
     })
+
+
+@login_required
+def fetch_bid(request):
+    if request.method == "POST":
+        listing_name = request.POST["listing_name"]
+        bid_price = request.POST["bid_price"]
+        bid_item = Items.objects.get(item_name=listing_name)
+        bid_item_id = bid_item.id
+        user = request.user.id
+        createBid = Bid(item_id=bid_item_id,
+                        bid_price=bid_price, bid_creator_id=user)
+        createBid.save()
+
+        #bid(item, bid_price, user)
+    else:
+        return render(request, "auctions/listing.html", {
+
+        })
 
 
 def categories(request):
-    getCategories = Category.objects.all()
+    get_categories = Category.objects.all()
     return render(request, "auctions/categories.html", {
-        "ListCategories": getCategories
+        "list_categories": get_categories
     })
 
 
-def categoryName(request, catName):
-    get_cat = Category.objects.get(name=catName)
+def category_name(request, cat_name):
+    get_cat = Category.objects.get(category_name=cat_name)
     list_items = get_cat.CategoryItems.all()
     return render(request, "auctions/categoryName.html", {
-        "cat_name": catName,
+        "cat_name": cat_name,
         "list_items": list_items
     })
 
@@ -59,20 +78,7 @@ def login_view(request):
 
 
 @login_required
-def placeBid(request):
-    if request.method == "POST":
-        title = request.POST["title_name"]
-        get_item = Items.objects.get(name=title)
-        bid = request.POST["bid"]
-        user_id = request.user.id
-        bid_Create = Bid(item=get_item.id, bid_price=bid, bidOwner=user_id)
-        bid_Create.save()
-    else:
-        return HttpResponseRedirect(reverse("login"))
-
-
-@login_required
-def createListing(request):
+def create_listing(request):
     if request.method == "GET":
         return render(request, 'auctions/createListing.html',)
         # REVIEW: alert box
@@ -85,11 +91,11 @@ def createListing(request):
         cat_name = request.POST["catgyName"]
         userPk = request.user.id  # REVIEW:
         user = User.objects.get(id=userPk)
-        newItem = Items(name=postTitle, description=postDes,
-                        is_active=True, imageUrl=imgUrl, owner=user, start_price=startPrice)
+        newItem = Items(item_name=postTitle, description=postDes,
+                        is_active=True, image_url=imgUrl, item_owner=user, start_price=startPrice)
         itmID = newItem.id
     #    userItem = UserItems(user=user, Item=itmID) # REVIEW:
-        catAdd = Category(name=cat_name)
+        catAdd = Category(category_name=cat_name)
         newItem.save()
         # userItem.save()
         catAdd.save()

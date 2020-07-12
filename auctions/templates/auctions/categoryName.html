@@ -1,15 +1,16 @@
 {% extends "auctions/layout.html" %}
-
+<!-- Category Items page displaying all listings releated to a specifc Category selected -->
 {% block body %}
-<h2>Results for {{ cat_name }}</h2> <!-- REVIEW: make loop  -->
+<h2>Results for {{ cat_name }}</h2>
 
 
 {% for item in list_items   %}
+<!-- Loop iternates over all items belonging to a specific cateogory-->
 <span><br></span>
 <div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="{{item.imageUrl}}">
+  <img class="card-img-top" src="{{item.image_url}}">
   <div class="card-body">
-    <h5 class="card-title">{{item.name}}</h5>
+    <h5 class="card-title">{{item.item_name}}</h5>
     <p class="card-text">{{item.description}}</p>
     <p>Current Bid: {{item.start_price}}</p>
     <form action="#" method="GET">

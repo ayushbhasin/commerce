@@ -7,24 +7,24 @@ class User(AbstractUser):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=30)
+    category_name = models.CharField(max_length=30)
 
     class Meta:
         verbose_name_plural = "Categories"
 
     def __str__(self):
-        return self.name
+        return self.category_name
 
 
 class Items(models.Model):
-    name = models.CharField(max_length=30)
+    item_name = models.CharField(max_length=30)
     description = models.CharField(max_length=100)
-    imageUrl = models.URLField(max_length=200, null=True)
+    image_url = models.URLField(max_length=200, null=True)
     is_active = models.BooleanField()
-    owner = models.ForeignKey(
+    item_owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="UserItems")
     # REVIEW:
-    category = models.ForeignKey(
+    item_category = models.ForeignKey(
         Category, null=True, blank=True, on_delete=models.SET(Category), related_name='CategoryItems')
     start_price = models.DecimalField(max_digits=8, decimal_places=2)
 
@@ -32,39 +32,36 @@ class Items(models.Model):
         verbose_name_plural = "Items"
 
     def __str__(self):
-        return self.name
+        return self.item_name
 # REVIEW: if there are no bids return current price
 # if there are bids iternate over bids and get the highest number
 
 
 class UserItems(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    Item = models.ForeignKey(Items, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    item_id = models.ForeignKey(Items, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user}: ({self.Item})"
+        return f"{self.user_id}: ({self.item_id})"
 
     class Meta:
         verbose_name_plural = "User Items"
 
 
 class Bid(models.Model):
-    item = models.ForeignKey(
+    item_id = models.ForeignKey(
         Items, on_delete=models.CASCADE, related_name="ItemBids")
     bid_price = models.DecimalField(max_digits=8, decimal_places=2)
-    bidOwner = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.bid_price
+    bid_creator = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Comments(models.Model):
-    item = models.ForeignKey(Items, on_delete=models.CASCADE)
-    text = models.CharField(max_length=100)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item_id = models.ForeignKey(Items, on_delete=models.CASCADE)
+    comment_text = models.CharField(max_length=100)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "Comments"
 
     def __str__(self):
-        return self.text
+        return self.comment_text
