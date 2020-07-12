@@ -10,7 +10,15 @@ from .models import *
 def index(request):
     items = Items.objects.all()
     return render(request, "auctions/index.html", {
-        "items": items
+        "items": items,
+    })
+
+
+def listing(request, item):
+    print(item)
+    get_item = Items.objects.get(name=item)
+    return render(request, "auctions/listing.html", {
+        "get_item": get_item
     })
 
 
@@ -48,6 +56,19 @@ def login_view(request):
             })
     else:
         return render(request, "auctions/login.html")
+
+
+@login_required
+def placeBid(request):
+    if request.method == "POST":
+        title = request.POST["title_name"]
+        get_item = Items.objects.get(name=title)
+        bid = request.POST["bid"]
+        user_id = request.user.id
+        bid_Create = Bid(item=get_item.id, bid_price=bid, bidOwner=user_id)
+        bid_Create.save()
+    else:
+        return HttpResponseRedirect(reverse("login"))
 
 
 @login_required

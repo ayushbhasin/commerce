@@ -49,7 +49,8 @@ class UserItems(models.Model):
 
 
 class Bid(models.Model):
-    item = models.ForeignKey(Items, on_delete=models.CASCADE)
+    item = models.ForeignKey(
+        Items, on_delete=models.CASCADE, related_name="ItemBids")
     bid_price = models.DecimalField(max_digits=8, decimal_places=2)
     bidOwner = models.ForeignKey(User, on_delete=models.CASCADE)
 

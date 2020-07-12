@@ -6,18 +6,14 @@
 
 {% for item in items   %}
 <span><br></span>
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="{{item.imageUrl}}">
-  <div class="card-body">
-    <h5 class="card-title">{{item.name}}</h5>
-    <p class="card-text">{{item.description}}</p>
-    <p>Current Bid: {{item.start_price}}</p>
-    <form action="{% url 'index' %}" method="GET">
-      <input type="text"><br>
-      <input class="btn btn-primary" type="submit" value="Place Bid">
-    </form>
+<a href="{% url 'listing' item %}">
+  <div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="{{item.imageUrl}}">
+    <div class="card-body">
+      <h5 class="card-title">{{item.name}}</h5>
+    </div>
   </div>
-</div>
+</a>
 <!--call function django template (highest price)
 getcurrentprice-->
 {% endfor %}
